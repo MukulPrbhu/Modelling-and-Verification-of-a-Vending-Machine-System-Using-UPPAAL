@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+chan selection, not_available, wrong_code, checkout, paysys;  
+broadcast chan unsuccessful, pay, success;   
+bool reset = false;</declaration>
+	<template>
+		<name x="9" y="9">Client</name>
+		<declaration>// Place local declarations here.
+clock time;</declaration>
+		<location id="id0" x="-493" y="-85">
+			<name x="-552" y="-102">Start</name>
+		</location>
+		<location id="id1" x="-280" y="-85">
+			<name x="-340" y="-76">Product_Selection</name>
+		</location>
+		<location id="id2" x="-59" y="-85">
+			<name x="-68" y="-119">Payment</name>
+		</location>
+		<location id="id3" x="-263" y="111">
+			<name x="-323" y="128">Dispense_Product</name>
+		</location>
+		<init ref="id0"/>
+		<transition id="id4">
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-187" y="-110">pay?</label>
+		</transition>
+		<transition id="id5">
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-459" y="-280">not_available?</label>
+			<label kind="comments" x="-476" y="-331">Item not available</label>
+			<nail x="-195" y="-229"/>
+			<nail x="-399" y="-306"/>
+			<nail x="-595" y="-229"/>
+		</transition>
+		<transition id="id6">
+			<source ref="id3"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-484" y="85">checkout!</label>
+			<label kind="comments" x="-612" y="85">Product Taken</label>
+			<nail x="-493" y="111"/>
+		</transition>
+		<transition id="id7">
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-136" y="85">success?</label>
+			<label kind="comments" x="-51" y="85">Payment Successful</label>
+			<nail x="-59" y="111"/>
+		</transition>
+		<transition id="id8">
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-263" y="-51">unsuccessful?</label>
+			<label kind="comments" x="-382" y="26">Did not pay / Card declined</label>
+			<nail x="-280" y="17"/>
+		</transition>
+		<transition id="id9">
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-433" y="-187">wrong_code?</label>
+			<label kind="comments" x="-535" y="-212">Product not available / Invalid Code</label>
+			<nail x="-280" y="-187"/>
+			<nail x="-493" y="-187"/>
+		</transition>
+		<transition id="id10">
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-433" y="-85">selection!</label>
+			<label kind="comments" x="-467" y="-110">Enter product code</label>
+		</transition>
+	</template>
+	<template>
+		<name>Vending_Machine</name>
+		<declaration>clock time;</declaration>
+		<location id="id11" x="-1113" y="-416">
+			<name x="-1173" y="-425">Start</name>
+		</location>
+		<location id="id12" x="-875" y="-416">
+			<name x="-935" y="-408">Code_Verification</name>
+		</location>
+		<location id="id13" x="-612" y="-416">
+			<name x="-671" y="-450">Product_Availability</name>
+		</location>
+		<location id="id14" x="-610" y="-229">
+			<name x="-595" y="-238">Payment_Status</name>
+		</location>
+		<location id="id15" x="-926" y="-229">
+			<name x="-986" y="-212">Product_Dispense</name>
+		</location>
+		<init ref="id11"/>
+		<transition id="id16">
+			<source ref="id15"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="-1071" y="-297">checkout?</label>
+			<label kind="comments" x="-960" y="-297">Product dispensed</label>
+		</transition>
+		<transition id="id17">
+			<source ref="id14"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="-935" y="-153">unsuccessful?</label>
+			<label kind="comments" x="-952" y="-119">Transaction Cancel</label>
+			<nail x="-612" y="-127"/>
+			<nail x="-1113" y="-127"/>
+		</transition>
+		<transition id="id18">
+			<source ref="id13"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="-935" y="-382">not_available!</label>
+			<label kind="comments" x="-977" y="-340">Valid Code but slot empty</label>
+			<nail x="-884" y="-348"/>
+		</transition>
+		<transition id="id19">
+			<source ref="id12"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="-1037" y="-510">wrong_code!</label>
+			<label kind="comments" x="-1045" y="-535">Invalid Code</label>
+			<nail x="-875" y="-510"/>
+			<nail x="-1113" y="-510"/>
+		</transition>
+		<transition id="id20">
+			<source ref="id14"/>
+			<target ref="id15"/>
+			<label kind="synchronisation" x="-816" y="-255">success?</label>
+			<label kind="comments" x="-850" y="-221">Payment Successful</label>
+		</transition>
+		<transition id="id21">
+			<source ref="id13"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="-603" y="-331">pay!</label>
+			<label kind="comments" x="-680" y="-331">Payment</label>
+		</transition>
+		<transition id="id22">
+			<source ref="id12"/>
+			<target ref="id13"/>
+			<label kind="comments" x="-807" y="-450">Check Product</label>
+		</transition>
+		<transition id="id23">
+			<source ref="id11"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="-1045" y="-416">selection?</label>
+			<label kind="comments" x="-1045" y="-442">Enter Code</label>
+		</transition>
+	</template>
+	<template>
+		<name>Payment_sys</name>
+		<location id="id24" x="-408" y="-170">
+			<name x="-552" y="-178">Payment_Status</name>
+		</location>
+		<location id="id25" x="34" y="-42">
+			<name x="24" y="-76">Cash_Pay</name>
+		</location>
+		<location id="id26" x="-178" y="-42">
+			<name x="-272" y="-51">Card_Pay</name>
+		</location>
+		<location id="id27" x="-76" y="-170">
+			<name x="-67" y="-204">Payment_Method</name>
+		</location>
+		<location id="id28" x="-68" y="76">
+			<name x="-78" y="42">status</name>
+		</location>
+		<init ref="id24"/>
+		<transition id="id29">
+			<source ref="id27"/>
+			<target ref="id24"/>
+			<label kind="synchronisation" x="-289" y="-280">unsuccessful!</label>
+			<label kind="comments" x="-314" y="-246">Cancel Transaction</label>
+			<nail x="-76" y="-255"/>
+			<nail x="-408" y="-255"/>
+		</transition>
+		<transition id="id30">
+			<source ref="id28"/>
+			<target ref="id24"/>
+			<label kind="synchronisation" x="-399" y="42">success!</label>
+			<label kind="comments" x="-518" y="42">Full Payment</label>
+			<nail x="-408" y="76"/>
+		</transition>
+		<transition id="id31">
+			<source ref="id28"/>
+			<target ref="id27"/>
+			<label kind="comments" x="102" y="42">Partial Payment</label>
+			<nail x="238" y="76"/>
+			<nail x="238" y="-170"/>
+		</transition>
+		<transition id="id32">
+			<source ref="id25"/>
+			<target ref="id28"/>
+		</transition>
+		<transition id="id33">
+			<source ref="id27"/>
+			<target ref="id25"/>
+			<label kind="comments" x="-17" y="-136">Pay by Cash</label>
+		</transition>
+		<transition id="id34">
+			<source ref="id26"/>
+			<target ref="id28"/>
+		</transition>
+		<transition id="id35">
+			<source ref="id27"/>
+			<target ref="id26"/>
+			<label kind="comments" x="-229" y="-136">Pay by Card</label>
+		</transition>
+		<transition id="id36">
+			<source ref="id24"/>
+			<target ref="id27"/>
+			<label kind="synchronisation" x="-255" y="-170">pay?</label>
+			<label kind="comments" x="-306" y="-195">Initiate Payment</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+//Process = Client(), Vending Machine();
+// List one or more processes to be composed into a system.
+system Client, Vending_Machine, Payment_sys;
+</system>
+	<queries>
+		<query>
+			<formula>A[] not deadlock</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-08-01 14:30:10 -0400">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; not deadlock</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-08-01 14:30:23 -0400">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; deadlock</formula>
+			<comment/>
+			<result outcome="failure" type="quality" timestamp="2024-08-01 14:30:34 -0400">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Vending_Machine.Product_Dispense</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-08-01 14:30:59 -0400">
+			</result>
+		</query>
+		<query>
+			<formula>A[] !(Vending_Machine.Product_Dispense &amp;&amp; Payment_sys.Payment_Method)</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-08-01 14:31:49 -0400">
+			</result>
+		</query>
+		<query>
+			<formula>A[] !(Vending_Machine.Product_Dispense &amp;&amp; Client.Product_Selection)</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-08-01 14:32:11 -0400">
+			</result>
+		</query>
+		<query>
+			<formula>A[] !(Vending_Machine.Product_Dispense &amp;&amp; Vending_Machine.Product_Availability)</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-08-01 14:32:37 -0400">
+			</result>
+		</query>
+		<query>
+			<formula>A[] !(Vending_Machine.Product_Dispense &amp;&amp; Payment_sys.status)</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-08-01 14:32:53 -0400">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Payment_sys.Cash_Pay imply Payment_sys.status)</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-08-01 14:34:16 -0400">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Vending_Machine.Payment_Status imply Vending_Machine.Product_Dispense)</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-08-01 14:35:48 -0400">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Client.Product_Selection imply Client.Dispense_Product)</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-08-01 14:36:53 -0400">
+			</result>
+		</query>
+		<query>
+			<formula>A[] (Client.Product_Selection imply Client.Dispense_Product)</formula>
+			<comment/>
+			<result outcome="failure" type="quality" timestamp="2024-08-01 14:37:18 -0400">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Vending_Machine.Code_Verification imply Vending_Machine.Product_Availability)</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-08-01 14:38:14 -0400">
+			</result>
+		</query>
+		<query>
+			<formula>A[] (Vending_Machine.Code_Verification imply Vending_Machine.Product_Availability)</formula>
+			<comment/>
+			<result outcome="failure" type="quality" timestamp="2024-08-01 14:38:35 -0400">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Vending_Machine.Code_Verification imply Vending_Machine.Payment_Status)</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-08-01 14:39:00 -0400">
+			</result>
+		</query>
+		<query>
+			<formula>A[] (Vending_Machine.Code_Verification imply Vending_Machine.Payment_Status)</formula>
+			<comment/>
+			<result outcome="failure" type="quality" timestamp="2024-08-01 14:39:17 -0400">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (Vending_Machine.Code_Verification imply Vending_Machine.Product_Dispense)</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-08-01 14:39:42 -0400">
+			</result>
+		</query>
+		<query>
+			<formula>A[] (Vending_Machine.Code_Verification imply Vending_Machine.Product_Dispense)</formula>
+			<comment/>
+			<result outcome="failure" type="quality" timestamp="2024-08-01 14:40:21 -0400">
+			</result>
+		</query>
+		<query>
+			<formula>A[] (Payment_sys)</formula>
+			<comment/>
+		</query>
+		<query>
+			<formula/>
+			<comment/>
+		</query>
+	</queries>
+</nta>
